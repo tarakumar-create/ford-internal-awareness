@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ford × Amplitude | Internal Awareness</title>
+<style>
+/* ── RESET ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  background: #e5e5e5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 0 64px;
+}
+
+/* ── PAGE ── */
+.page {
+  width: 850px;
+  background: #fff;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  position: relative;
+}
+
+/* ── PRINT ── */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  @page { size: 850px 1330px; margin: 0; }
+  html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; display: block !important; width: 850px !important; }
+  .page { width: 850px !important; box-shadow: none !important; page-break-inside: avoid; }
+  .toolbar { display: none !important; }
+  [contenteditable] { background: none !important; box-shadow: none !important; outline: none !important; }
+  .upload-overlay, .img-overlay, .logo-slot-overlay { display: none !important; }
+}
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(150deg, #001233 0%, #001A4F 55%, #0a1a55 100%);
+  padding: 22px 40px 40px;
+  position: relative;
+  overflow: hidden;
+  min-height: 220px;
+}
+
+/* Logo bar */
+.logo-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 26px;
+  position: relative;
+  z-index: 3;
+}
+.logo-upload-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.logo-upload-wrap:hover .upload-overlay { opacity: 1; }
+.upload-overlay {
+  position: absolute;
+  inset: -4px;
+  background: rgba(0,82,242,0.25);
+  border: 1.5px dashed rgba(255,255,255,0.5);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  z-index: 10;
+}
+.upload-overlay span {
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(0,0,0,0.5);
+  padding: 3px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Amplitude logo (official file, forced white for dark header) */
+.amp-logo-img {
+  height: 26px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.logo-divider {
+  color: rgba(255,255,255,0.35);
+  font-size: 18px;
+  font-weight: 300;
+  margin: 0 14px;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Ford logo (official file, native blue on a white chip so the wordmark reads) */
+.partner-chip {
+  background: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+}
+.partner-logo-img {
+  height: 22px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Header content */
+.header-content {
+  max-width: 520px;
+  position: relative;
+  z-index: 3;
+}
+.header h1 {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.6px;
+  margin-bottom: 14px;
+}
+.header-sub {
+  color: rgba(255,255,255,0.7);
+  font-size: 13.5px;
+  line-height: 1.6;
+  max-width: 460px;
+}
+
+/* 3D shapes */
+.shapes-wrap {
+  position: absolute;
+  top: 0; right: 0;
+  width: 380px; height: 245px;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.shapes-wrap svg { width: 100%; height: 100%; }
+
+/* ── BODY ── */
+.body {
+  padding: 28px 40px 20px;
+  background: #fff;
+}
+
+/* Challenge row */
+.challenge-row {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+.challenge-left { flex: 1.15; }
+.challenge-intro {
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #111;
+  margin-bottom: 16px;
+}
+.challenge-sub {
+  font-size: 13px;
+  color: #444;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.challenge-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.challenge-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.55;
+  margin-bottom: 8px;
+}
+.challenge-list li::before {
+  content: '●';
+  color: #0052F2;
+  font-size: 10px;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+/* Right column — quote / image card */
+.challenge-right { flex: 0.85; }
+.screenshot-wrap {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #f4f6fb;
+  min-height: 210px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.screenshot-wrap:hover .img-overlay { opacity: 1; }
+.screenshot-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+.screenshot-placeholder {
+  width: 100%;
+  padding: 6px;
+}
+.quote-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+  padding: 24px 22px;
+  border-top: 4px solid #0052F2;
+}
+.quote-card .qmark {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 46px;
+  line-height: 0.5;
+  color: #0052F2;
+  display: block;
+  height: 22px;
+}
+.quote-card .qtext {
+  font-size: 16.5px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.4;
+  letter-spacing: -0.2px;
+  margin: 6px 0 16px;
+}
+.quote-card .qname { font-size: 12.5px; font-weight: 700; color: #111; }
+.quote-card .qtitle { font-size: 11px; color: #777; margin-top: 1px; }
+
+.img-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  border-radius: 8px;
+}
+.img-overlay-btn {
+  background: #fff;
+  color: #333;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+}
+.img-overlay-btn:hover { background: #f0f0f0; }
+.img-overlay-btn.danger { background: #fee; color: #c00; }
+.img-overlay-btn.danger:hover { background: #fcc; }
+
+/* Body copy */
+.body-copy {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #ebebeb;
+}
+
+/* Features */
+.features-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111;
+  text-align: center;
+  margin-bottom: 18px;
+  letter-spacing: -0.3px;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+.feature {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.feature-icon-wrap {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.feature-icon-wrap svg { width: 28px; height: 28px; }
+.feature-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+.feature-desc {
+  font-size: 12.5px;
+  color: #555;
+  line-height: 1.55;
+}
+
+/* ── QUOTE STRIP ── */
+.quote-strip {
+  background: #fff;
+  padding: 22px 40px 4px;
+}
+.quote-strip-label {
+  text-align: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 16px;
+}
+.quote-strip-row { display: flex; gap: 28px; }
+.qs-item { flex: 1; border-left: 3px solid #0052F2; padding-left: 14px; }
+.qs-text { font-size: 13px; font-style: italic; color: #333; line-height: 1.5; margin-bottom: 6px; }
+.qs-attr { font-size: 11px; color: #777; }
+.qs-attr b { color: #111; font-style: normal; }
+
+/* ── LOGO STRIP ── */
+.logo-strip {
+  background: #f5f6fa;
+  padding: 18px 40px 16px;
+  border-top: 1px solid #eee;
+}
+.logo-strip-label {
+  text-align: center;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 18px;
+}
+.logos-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.logo-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.15s;
+  min-width: 60px;
+}
+.logo-slot:hover { background: rgba(0,0,0,0.04); }
+.logo-slot:hover .logo-slot-overlay { opacity: 1; }
+.logo-slot-img { height: 28px; width: auto; opacity: 0.5; filter: grayscale(100%); display: block; }
+.logo-slot-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #b8bcc9;
+  letter-spacing: 0.3px;
+}
+.logo-slot-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,82,242,0.10);
+  border: 1px dashed rgba(0,82,242,0.4);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+.logo-slot-overlay span { font-size: 9px; color: #0052F2; font-weight: 700; }
+
+/* ── FOOTER ── */
+.footer {
+  padding: 12px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #eee;
+  background: #fff;
+}
+.footer-copy { font-size: 10.5px; color: #bbb; }
+.ae-block { text-align: right; }
+.ae-name { font-size: 12.5px; font-weight: 700; color: #222; }
+.ae-title { font-size: 11px; color: #777; margin-top: 1px; }
+.ae-contact { font-size: 11px; color: #0052F2; margin-top: 2px; }
+
+/* ── EDIT UI ── */
+[contenteditable] { outline: none; cursor: text; }
+[contenteditable]:hover { background: rgba(0,82,242,0.06); border-radius: 2px; }
+[contenteditable]:focus { background: rgba(0,82,242,0.09); border-radius: 2px; box-shadow: 0 0 0 2px rgba(0,82,242,0.35); }
+
+/* Toolbar */
+.toolbar {
+  position: fixed;
+  top: 16px; left: 50%; transform: translateX(-50%);
+  background: #001A4F;
+  color: rgba(255,255,255,0.9);
+  display: flex; align-items: center; gap: 0;
+  border-radius: 24px;
+  padding: 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  z-index: 9999;
+  font-size: 12px;
+  overflow: hidden;
+}
+.toolbar-item {
+  padding: 9px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+  transition: background 0.12s;
+  border: none; background: none; color: rgba(255,255,255,0.85);
+  font-size: 12px; font-family: inherit;
+}
+.toolbar-item:hover { background: rgba(255,255,255,0.1); }
+.toolbar-sep { width: 1px; background: rgba(255,255,255,0.15); height: 28px; }
+
+/* Hidden file inputs */
+input[type=file] { display: none; }
+</style>
+</head>
+<body>
+
+<!-- Hidden file inputs -->
+<input type="file" id="upload-amp-logo" accept="image/*">
+<input type="file" id="upload-partner-logo" accept="image/*">
+<input type="file" id="upload-screenshot" accept="image/*">
+<input type="file" id="upload-logo-0" accept="image/*">
+<input type="file" id="upload-logo-1" accept="image/*">
+<input type="file" id="upload-logo-2" accept="image/*">
+<input type="file" id="upload-logo-3" accept="image/*">
+<input type="file" id="upload-logo-4" accept="image/*">
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <span class="toolbar-item">✏️ Click any text to edit</span>
+  <div class="toolbar-sep"></div>
+  <span class="toolbar-item">🖼️ Hover images to replace</span>
+  <div class="toolbar-sep"></div>
+  <button class="toolbar-item" onclick="window.print()">⬇️ Save as PDF</button>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+
+    <!-- 3D shapes -->
+    <div class="shapes-wrap">
+      <svg viewBox="0 0 380 245" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="190" y="-55" width="155" height="155" rx="22" fill="url(#s1)" opacity="0.9" transform="rotate(18 190 -55)"/>
+        <rect x="270" y="20" width="130" height="130" rx="18" fill="url(#s2)" opacity="0.75" transform="rotate(-8 270 20)"/>
+        <rect x="130" y="10" width="90" height="90" rx="14" fill="url(#s3)" opacity="0.55" transform="rotate(30 130 10)"/>
+        <rect x="300" y="100" width="180" height="180" rx="28" fill="url(#s4)" opacity="0.25" transform="rotate(-15 300 100)"/>
+        <defs>
+          <linearGradient id="s1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4083FF"/><stop offset="100%" stop-color="#0052F2"/></linearGradient>
+          <linearGradient id="s2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6980FF"/><stop offset="100%" stop-color="#0052F2"/></linearGradient>
+          <linearGradient id="s3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#A373FF"/><stop offset="100%" stop-color="#6980FF"/></linearGradient>
+          <linearGradient id="s4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#001A4F"/><stop offset="100%" stop-color="#001233"/></linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- Logo bar -->
+    <div class="logo-bar">
+      <!-- Amplitude logo (official Wikimedia file) -->
+      <div class="logo-upload-wrap" onclick="document.getElementById('upload-amp-logo').click()" title="Click to replace Amplitude logo">
+        <div id="amp-logo-display">
+          <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI1LjQuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCAyNDAwIDUwNi45MiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMjQwMCA1MDYuOTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojMTAwNjlGO30KPC9zdHlsZT4KPGc+Cgk8Zz4KCQk8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMjI1LjQ4LDExNi4yNGMtMS4zOC0xLjgyLTIuOTUtMi43OC00LjctMi43OGMtMS40NCwwLTIuNzUsMC42NC0zLjYsMS4xOQoJCQljLTEzLjI2LDEwLjQyLTMxLjQsNTQuNTMtNDYuMjcsMTEyLjY3bDEzLjE2LDAuMTVjMjYsMC4yOSw1Mi44NCwwLjYsNzkuMzgsMS4wMWMtNi45OS0yNi42My0xMy42MS00OS40NS0xOS42Ny02Ny44OAoJCQlDMjM0LjkyLDEzMy42NywyMjguOTQsMTIxLjYxLDIyNS40OCwxMTYuMjR6Ii8+CgkJPHBhdGggY2xhc3M9InN0MCIgZD0iTTI1NC45OSw0LjE1Yy0xMzcuNTIsMC0yNDksMTExLjQ4LTI0OSwyNDljMCwxMzcuNTIsMTExLjQ4LDI0OSwyNDksMjQ5czI0OS0xMTEuNDgsMjQ5LTI0OQoJCQlDNTAzLjk5LDExNS42MywzOTIuNTEsNC4xNSwyNTQuOTksNC4xNXogTTQzNC4wNCwyNTcuNjdjLTAuMDIsMC4wMi0wLjA0LDAuMDMtMC4wNiwwLjA1Yy0wLjI3LDAuMjItMC41NCwwLjQyLTAuODMsMC42MgoJCQljLTAuMDksMC4wNi0wLjE4LDAuMTMtMC4yOCwwLjE5Yy0wLjE5LDAuMTItMC4zOSwwLjI0LTAuNTgsMC4zNWMtMC4xOCwwLjExLTAuMzYsMC4yMS0wLjU0LDAuMzFjLTAuMDEsMC4wMS0wLjAyLDAuMDEtMC4wMywwLjAyCgkJCWMtMS44MywwLjk2LTMuOTIsMS41MS02LjEzLDEuNTFjLTAuMTgsMC0xMTcuOTUsMC0xMTcuOTUsMGMwLjk0LDMuOTEsMS45Nyw4LjM1LDMuMDksMTMuMThjNi40NiwyNy45MSwyMy42NCwxMDIuMDYsNDEuODgsMTAyLjA2CgkJCWwwLjM2LDAuMDFsMC4yLTAuMDNsMC4zNSwwYzE0LjI1LDAsMjEuNTItMjAuNiwzNy40Ni02NS43NGwwLjE5LTAuNTVjMi41Ni03LjI1LDUuNDUtMTUuNDMsOC41OC0yNC4wOGwwLjgtMi4yMWwwLjAxLDAKCQkJYzAuODEtMi4xNiwyLjg5LTMuNyw1LjM0LTMuN2MzLjE1LDAsNS43MSwyLjU2LDUuNzEsNS43MWMwLDAuNTctMC4wOSwxLjEyLTAuMjQsMS42NGwwLDBsLTAuNjYsMi4yMgoJCQljLTEuNjYsNS4zNy0zLjQzLDEyLjY5LTUuNDcsMjEuMTZjLTkuNSwzOS4zNy0yMy44NSw5OC44NS02MC42Nyw5OC44NWwtMC4yNywwYy0yMy43OS0wLjE5LTM4LjAzLTM4LjIyLTQ0LjExLTU0LjQ2CgkJCWMtMTEuMzctMzAuMzctMTkuOTctNjIuNzMtMjguMjctOTQuMDdIMTYzLjM0bC0yMi41NCw3Mi4xNGwtMC4zMy0wLjI2Yy0yLjA2LDMuMjQtNS42OCw1LjMyLTkuNjcsNS4zMgoJCQljLTYuMjksMC0xMS40NC01LjEyLTExLjQ3LTExLjQxbDAuMDItMC4zOWwxLjM2LTguMTZjMy4xMS0xOC41NCw2Ljg0LTM3Ljc4LDExLjEtNTcuMjNIODUuOTdsLTAuMTctMC4xNwoJCQljLTguMzItMS4yLTE0LjcxLTguNTQtMTQuNzEtMTcuMWMwLTguMzksNS45NC0xNS41NCwxNC4xMi0xNi45OWMwLjc1LTAuMSwyLjI3LTAuMjMsNS4zNi0wLjIzYzAuNjYsMCwxLjQsMCwyLjIzLDAuMDIKCQkJYzE0LjUzLDAuMjUsMjkuOTUsMC40OCw0Ni44NiwwLjdjMjMuOTMtOTcuMjQsNTEuNjUtMTQ2LjYsODIuNC0xNDYuNzRjMzIuOTksMCw1Ny40Nyw3NS4xMiw3Ny4wNiwxNDguNjFsMC4wOCwwLjI5CgkJCWM0MC4yNSwwLjgxLDgzLjE1LDEuOTgsMTI0Ljg2LDQuOTdsMS43NSwwLjE2YzAuNjcsMC4wMSwxLjMzLDAuMDgsMS45NywwLjE4bDAuMjQsMC4wMmMwLjA3LDAuMDEsMC4xNCwwLjAzLDAuMjEsMC4wNQoJCQljMC4wNCwwLjAxLDAuMDcsMC4wMiwwLjExLDAuMDJjNi4wNywxLjIyLDEwLjU3LDYuNTQsMTAuNTcsMTIuOTRDNDM4LjkxLDI1MS41NSw0MzcuMDEsMjU1LjI0LDQzNC4wNCwyNTcuNjd6Ii8+Cgk8L2c+Cgk8Zz4KCQk8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNjQyLjE3LDMxNS40NWwtMTkuNzQsNDguNzhoLTU3LjM1TDY3NC4yLDEwOS41Mmg1MC42NWwxMDguNzQsMjU0LjcyaC01Ni45OGwtMTkuNzQtNDguNzhINjQyLjE3egoJCQkgTTY5OS4xNSwxNzMuOTRsLTM3LjI0LDkyLjczaDc1LjIyTDY5OS4xNSwxNzMuOTR6Ii8+CgkJPHBhdGggY2xhc3M9InN0MCIgZD0iTTExNTYuODIsMjY2LjN2OTcuOTRoLTUxLjc2di05My40N2MwLTI4LjMtMTMuNzgtNDMuNTctMzcuOTgtNDMuNTdjLTEwLjgsMC0yMi43Miw0Ljg0LTMzLjUyLDE5Ljc0CgkJCWMwLjc1LDYuMzMsMS40OSwxMi42NiwxLjQ5LDE5LjM2djk3Ljk0aC01MS43NnYtOTMuNDdjMC0yOC4zLTEzLjc4LTQzLjU3LTM4LjM2LTQzLjU3Yy0xMC4wNSwwLTIxLjIzLDUuOTYtMzEuNjUsMjAuMTF2MTE2LjkzCgkJCWgtNTEuNzZWMTg1Ljg2aDUxLjc2djEwLjhjMTEuMTctMTAuNDMsMjMuMDktMTYuMzksNDMuOTQtMTYuMzljMjIuNzIsMCw0Mi44Miw4Ljk0LDU2Ljk4LDI1LjMyCgkJCWMxOC45OS0xNy41LDM2Ljg3LTI1LjMyLDY0LjgtMjUuMzJDMTEyMi41NiwxODAuMjcsMTE1Ni44MiwyMTQuMTYsMTE1Ni44MiwyNjYuM3oiLz4KCQk8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTM4NC4zNSwyNzUuMjNjMCw1MS43Ni0zOS40Nyw5Mi43Mi04OC42Myw5Mi43MmMtMjAuMTEsMC0zNi44Ny01LjIxLTUwLjY0LTE0LjE1djk2LjQ1aC01MS43NnYtMjY0LjRoNTEuNzYKCQkJdjEwLjQzYzEzLjc4LTguOTQsMzAuNTQtMTQuMTUsNTAuNjQtMTQuMTVDMTM0NC44NywxODIuMTQsMTM4NC4zNSwyMjIuNzMsMTM4NC4zNSwyNzUuMjN6IE0xMzMzLjMzLDI3NS4yMwoJCQljMC0yNi40NC0xOS4zNi00OS41My00Ni4xOC00OS41M2MtMTUuMjcsMC0zMC41NCw1LjIxLTQyLjA4LDIwLjg1djU2Ljk4YzExLjU0LDE1LjI3LDI2LjgxLDIwLjQ4LDQyLjA4LDIwLjQ4CgkJCUMxMzEzLjk2LDMyNC4wMiwxMzMzLjMzLDMwMS4zLDEzMzMuMzMsMjc1LjIzeiIvPgoJCTxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0xNDY1LjE1LDM2NC4yM2gtNTEuNzZWOTkuODRoNTEuNzZWMzY0LjIzeiIvPgoJCTxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0xNTExLjcsMTIyLjkzYzAtMTcuNSwxMy43OC0zMC41NCwzMS4yOC0zMC41NGMxNy4xMywwLDMwLjkxLDEzLjAzLDMwLjkxLDMwLjU0CgkJCWMwLDE3LjEzLTEzLjc4LDI5Ljc5LTMwLjkxLDI5Ljc5QzE1MjUuNDgsMTUyLjcyLDE1MTEuNywxNDAuMDYsMTUxMS43LDEyMi45M3ogTTE1NjkuMDUsMTg1Ljg2djE3OC4zOGgtNTEuNzZWMTg1Ljg2SDE1NjkuMDV6Ii8+CgkJPHBhdGggY2xhc3M9InN0MCIgZD0iTTE3NTcuMSwzNjEuNjNjLTIxLjYsNi43LTMxLjI4LDguMTktNDguMDQsOC4xOWMtNDMuMiwwLTcxLjUtMzAuNTQtNzEuNS03Ni43MXYtNjMuNjhoLTM3LjYxdi00My41N2gzNy42MQoJCQl2LTYzLjY4aDUxLjM5djYzLjY4aDY0LjQydjQzLjU3aC02NC40MnY2My4zMWMwLDIwLjExLDEyLjI5LDI5LjQyLDMxLjI4LDI5LjQyYzkuNjgsMCwyMC4xMS0yLjIzLDMwLjE2LTQuODRMMTc1Ny4xLDM2MS42M3oiLz4KCQk8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTk2NC44OSwzNjQuMjNoLTUxLjc2di0xMi42NmMtMTQuNTIsMTEuNTQtMzAuOTEsMTguMjUtNTEuMDIsMTguMjVjLTQ2LjkyLDAtNzguMi0zMy44OS03OC4yLTg1LjY1di05OC4zMQoJCQloNTEuNzZ2OTMuNDdjMCwyOC4zLDE0LjE1LDQzLjU3LDM4LjM2LDQzLjU3YzEzLjAzLDAsMjcuMTgtNy44MiwzOS4xLTIyLjM0di0xMTQuN2g1MS43NlYzNjQuMjN6Ii8+CgkJPHBhdGggY2xhc3M9InN0MCIgZD0iTTIxODQuNjEsMzY0LjIzaC01MS43NnYtMTAuNDNjLTEzLjc4LDguOTQtMzAuNTQsMTQuMTUtNTAuNjUsMTQuMTVjLTQ5LjE2LDAtODktNDAuNTktODktOTMuMQoJCQljMC01MS43NiwzOS44NS05Mi43Myw4OS05Mi43M2MyMC4xMSwwLDM2Ljg3LDUuMjEsNTAuNjUsMTQuMTVWOTkuODRoNTEuNzZWMzY0LjIzeiBNMjEzMi44NCwzMDMuNTR2LTU2Ljk4CgkJCWMtMTEuNTQtMTUuMjctMjYuODEtMjAuNDgtNDIuMDgtMjAuNDhjLTI3LjE4LDAtNDYuMTgsMjIuNzItNDYuMTgsNDguNzhjMCwyNi40NCwxOC45OSw0OS41Myw0Ni4xOCw0OS41MwoJCQlDMjEwNi4wMywzMjQuMzksMjEyMS4zLDMxOS4xOCwyMTMyLjg0LDMwMy41NHoiLz4KCQk8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMjM5NC42MywyODguMjdoLTEzMS40NWM0LjEsMjAuODUsMTcuODgsMzcuMjQsNDYuMTgsMzcuMjRjMTQuNTIsMCwyNC41OC00LjQ3LDMwLjE2LTEzLjQxaDU0CgkJCWMtOS42OCwzNC4yNi00My4yLDU3LjcyLTg1LjI4LDU3LjcyYy01Ny4zNSwwLTk2LjA4LTQxLjMzLTk2LjA4LTk0LjU5YzAtNTUuMTEsMzguMzYtOTQuOTYsOTQuNTktOTQuOTYKCQkJYzUxLjAyLDAsODksMzYuMTIsODksOTEuMjRDMjM5NS43NSwyNzguOTYsMjM5NS4zOCwyODMuMDUsMjM5NC42MywyODguMjd6IE0yMjYzLjU1LDI1Ny43M2g4MC44MQoJCQljLTIuOTgtMjIuMzQtMTYuMzktMzQuNjMtMzcuMjQtMzQuNjNDMjI4Mi4xNywyMjMuMSwyMjY4LjM5LDIzNy42MiwyMjYzLjU1LDI1Ny43M3oiLz4KCTwvZz4KPC9nPgo8L3N2Zz4K" class="amp-logo-img" alt="Amplitude">
+        </div>
+        <div class="upload-overlay"><span>Replace logo</span></div>
+      </div>
+
+      <span class="logo-divider">×</span>
+
+      <!-- Ford logo (official Wikimedia file) -->
+      <div class="logo-upload-wrap" onclick="document.getElementById('upload-partner-logo').click()" title="Click to replace Ford logo">
+        <div id="partner-logo-display" class="partner-chip">
+          <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjxzdmcKICAgd2lkdGg9IjEwMDAiCiAgIGhlaWdodD0iMzU5LjkxMzgyIgogICB2ZXJzaW9uPSIxLjEiCiAgIHZpZXdCb3g9IjAgMCAyNjQuNTgzMzMgOTUuMjI3MzM5IgogICBpZD0ic3ZnMTYiCiAgIHNvZGlwb2RpOmRvY25hbWU9IkZvcmQuc3ZnIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIxLjIuMiAoNzMyYTAxZGE2MywgMjAyMi0xMi0wOSkiCiAgIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIgogICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnMKICAgICBpZD0iZGVmczIwIiAvPgogIDxzb2RpcG9kaTpuYW1lZHZpZXcKICAgICBpZD0ibmFtZWR2aWV3MTgiCiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcmNvbG9yPSIjMTExMTExIgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMSIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiNkMWQxZDEiCiAgICAgc2hvd2dyaWQ9ImZhbHNlIgogICAgIGlua3NjYXBlOnpvb209IjAuNiIKICAgICBpbmtzY2FwZTpjeD0iNDYyLjUiCiAgICAgaW5rc2NhcGU6Y3k9IjE4MCIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjEzNjYiCiAgICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iNzA1IgogICAgIGlua3NjYXBlOndpbmRvdy14PSItOCIKICAgICBpbmtzY2FwZTp3aW5kb3cteT0iLTgiCiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJzdmcxNiIgLz4KICA8ZwogICAgIGlkPSJnMjMxNyI+CiAgICA8cGF0aAogICAgICAgZD0iTSAxMzIuMjkxNjcsMCBDIDU5LjE5OTYzNywwIC0xLjk3ODYwNTFlLTQsMjEuMjgyMyAtMS45Nzg2MDUxZS00LDQ3LjYxNDY3MSBjIDAsMjYuMzI0MzcyIDU5LjIwMzgzNDg2MDUxLDQ3LjYxMjY3MiAxMzIuMjkxODY3ODYwNTEsNDcuNjEyNjcyIDczLjA5NzAzLDAgMTMyLjI5MTg2LC0yMS4yODkzIDEzMi4yOTE4NiwtNDcuNjEyNjcyIEMgMjY0LjU4MzUzLDIxLjI4MTMgMjA1LjM4OTcsMCAxMzIuMjkxNjcsMCBaIgogICAgICAgZmlsbD0iIzA2NGE5MyIKICAgICAgIGlkPSJwYXRoMiIKICAgICAgIHN0eWxlPSJmaWxsOiMwMDA5NWI7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjEuMDAwMDEiIC8+CiAgICA8cGF0aAogICAgICAgZD0ibSAxMzIuOTYxNjgsOTEuMDUxMjg0IGMgLTcwLjM4NDk5NiwwIC0xMjcuNDQxOCwtMTkuNjYxMjc3IC0xMjcuNDQxOCwtNDMuOTE2NjE5IDAsLTI0LjI1ODM0MiA1Ny4wNTc4MDQsLTQzLjkxODYxOTYgMTI3LjQ0MTgsLTQzLjkxODYxOTYgNzAuMzc3OTksMCAxMjcuNDMxNzksMTkuNjU5Mjc3NiAxMjcuNDMxNzksNDMuOTE4NjE5NiAwLDI0LjI1NDM0MiAtNTcuMDU1OCw0My45MTY2MTkgLTEyNy40MzE3OSw0My45MTY2MTkgeiBtIDAsLTg0LjAzMDE4NSBjIC02Ny45MTE5NjEsMCAtMTIyLjk2MTczNjksMTcuOTU2MjUzIC0xMjIuOTYxNzM2OSw0MC4xMTM1NjYgMCwyMi4xNTgzMTIgNTUuMDQ3Nzc1OSw0MC4xMTY1NjUgMTIyLjk2MTczNjksNDAuMTE2NTY1IDY3LjkxMDk1LDAgMTIyLjk1MTczLC0xNy45NTkyNTMgMTIyLjk1MTczLC00MC4xMTY1NjUgMCwtMjIuMTU3MzEzIC01NS4wNDQ3OCwtNDAuMTEzNTY2IC0xMjIuOTUxNzMsLTQwLjExMzU2NiB6IgogICAgICAgaWQ9InBhdGg2IgogICAgICAgc3R5bGU9ImZpbGw6I2ZmZmZmZjtzdHJva2Utd2lkdGg6MS4wMDAwMSIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icGF0aDgiCiAgICAgICBzdHlsZT0iZmlsbDojZmZmZmZmO3N0cm9rZS13aWR0aDoxLjAwMDAxIgogICAgICAgZD0ibSA5OS43MTg0MTEsMTQuMTUzMTYyIGMgLTEuODA4NjAyLDAuMDA1NyAtMy42MjY0OTgsMC4wNzYwNyAtNS40NTY1MjIsMC4yMjU4MjcgLTEyLjE1NTE1OSwxLjAxMzAxMyAtMjMuNzI0ODczLDcuNzg5MzQxIC0yMy43NDU4NzMsMTguMDc3NDc2IC0wLjAxMyw1LjIxNzA2OCAzLjczMjgyMyw5LjQ0NDM2NiA5LjUzNjksOS4yNTgzNjMgNi44MjAwODksLTAuMjI5MDAyIDEyLjQxODk1MiwtNS42MzkxNSAxNS4zNDk5OSwtMTIuNDYwMjQgMS4xMTIwMTUsLTIuNTg4MDM0IC0wLjk0NzUyMSwtMy42NjMwMTYgLTEuOTI3NTM0LC0yLjE3Mjk5NyBhIDE3LjI5ODI0NCwxNy4yOTgyNDQgMCAwIDEgLTYuODgyMjc3LDYuMDYxNjU1IGMgLTMuMjA5MDQyLDEuNTU2MDIgLTYuNjM5MTE3LDEuMTM2MTkyIC03LjY3OTEzLC0xLjQ0Mzg0MiAtMS40NjIwMTksLTMuNjQwMDQ3IDEuNTc3MDY0LC05LjA4NjkxOSA4LjUxMjE1NSwtMTEuNjQ5OTUyIDEwLjAxNzEzMSwtMy42NzIwNDggMjAuNDk4MDUsLTEuMjQyOTg4IDMwLjU4MzE5LDAuNjMzMDM3IDAuMTQ0LDAgMC42ODEyLDAuMjk1MDE3IDAuMjA2MTksMC41NDAwMiAtMS44MDYwMywwLjk3NTAxMyAtMy41ODQxMSwxLjc2Nzg4OSAtNi4zNTQxNCw0LjEyNzkxOSAtMS45ODYwMywxLjY4NDAyMyAtNC41ODYwMSwzLjkyNjA2NSAtNi41OTcwMyw2LjM2ODA5NiAtMS45OTYwMiwyLjQwNzAzMiAtMy40MTA4Niw0LjU1MzkyMyAtNS4yODI4ODUsNi45MzM5NTQgLTAuMjYxMDA0LDAuMzQ0MDA1IC0wLjU4MjI2MSwwLjMyODE0NiAtMC41NzgyNjEsMC4zMjgxNDYgLTQuNTYzMDU5LDAuNzYzMDA5IC05LjAzMDA5NSwxLjI3NDE2IC0xMy4xMjAxNDgsNC4wOTAxOTYgLTAuODQ2MDEyLDAuNTc4MDA3IC0xLjIxMzIyNSwxLjYwMzk5NSAtMC43MDAyMTcsMi4zODkwMDUgMC40NjEwMDUsMC42OTYwMDkgMS41MTU0MDIsMC43Njk4ODcgMi4yNDc0MTEsMC4yNDI4NzkgMi41NDEwMzQsLTEuODgyMDI0IDUuMTU3MDk4LC0yLjc2Nzk1OSA4LjE1NzEzNywtMi44NDk5NTkgMC4xMzEwMDIsMC4wMDggMC4xOTM5OTQsMC4wMjkwNCAwLjIzMDk5NCwwLjEwOTAzNyAwLjAyMywwLjA0NSAwLjAwOSwwLjEzOTgwNyAtMC4wNDQ5NiwwLjIwOTgwNyAtNC40OTQwNTksNi4xNzMwODEgLTUuNjE5NDUzLDcuNTY4MTM3IC05LjAwMDQ5OCwxMS4zOTUxODcgLTEuNzI5MDIyLDEuOTY3MDI2IC0zLjQyOTg5LDMuNjI3MjE0IC01LjMyOTkxNSw1LjM1NTIzNyAtNy42NzYxLDcuMDYxMDkyIC0xNS45MzI0NDMsNi45MzkwNTMgLTE4Ljg5NDQ4MiwyLjUxMTk5NSAtMS43NzAwMjMsLTIuNjU3MDM1IC0xLjUzNjczNywtNS40NDYyMzEgLTAuMzc2NzIyLC03Ljc2MDI2MiAxLjQyODAxOSwtMi44MzQwMzcgNC4zMTM3ODEsLTQuOTExMTY3IDYuNzEzODEyLC02LjEyNDE4MyAwLjg5MTAxMSwtMC40NTAwMDYgMS4xNDcyOTQsLTEuNTc4MDMzIDAuMjU1MjgyLC0yLjYwNjA0NiAtMC41NjcwMDcsLTAuNjcwMDA4IC0xLjk0MjIxOCwtMC43ODkwNjcgLTIuOTY2MjMxLC0wLjYwMzA2NSAtMy4xNDQwNDIsMC41NzUwMDggLTYuODU5MjEzLDIuOTI4MzQzIC05LjA1NDI0Miw1Ljc2MDM4MSAtMi40NzQwMzIsMy4xNzgwNCAtMy43MDk4OTgsNy4wMzYxOTEgLTMuMjk0ODk0LDExLjM2NjI0OCAwLjc0NTAxMSw3LjgxMzEwMiA3LjI0MjE1NCwxMi4zMjYyMDQgMTQuNjE4MjUxLDEyLjI3NDIwNCA1Ljg2OTMwNSwtMC4wNDU0IDExLjM5Nzc4MywtMS44MDYyMTcgMTguMDUwMDg4LC04LjQ5MjUxNyA2LjIwMTA4MSwtNi4yMzYwODIgMTEuODUwNTA5LC0xNS41NTExNDQgMTcuMTQwNTgsLTI0LjE4OTI1NyAwLjE2NiwtMC4yNzYwMDQgMC4yODM3OCwtMC40MjM5NjcgMS4wODc3OSwtMC41MjI5NjcgMy4zMTgwNSwtMC40MTEwMDUgOC4yMTc0MywtMC44Nzg4NSAxMS4zNTc0NywtMS4wNTg4NTEgMC42OTgwMSwtMC4wMzggMC44Mzk4MywtMC4wMzAzIDEuMTE5ODMsMC4zMTQ3MSAwLjgxODAxLDEuMDIyMDE0IDIuMDQ2ODEsMS44ODk0MiAzLjAzMDgyLDIuNDE3NDI3IDAuNDgwMDEsMC4yNTgwMDMgMC43MDgyLDAuMzg2NzQxIDEuMDg1MjEsMC4zOTI3NDEgMC40NjUsMC4wMSAwLjgyNjkyLC0wLjIzNzcwOSAxLjA2MDkyLC0wLjQ5OTcxMiAwLjMzMzAxLC0wLjM2MjAwNCAwLjQyNDk1LC0wLjgzNTQ5NyAwLjI0NDk1LC0xLjE0MDUgLTAuMTg4MDEsLTAuMzIwMDA1IC0yLjM3Nzc1LC0xLjUyMTYyNiAtMi40NDI3NSwtMi4wMDc2MzMgLTAuMDQ4LC0wLjMwMzAwNCAwLjI4NjgsLTAuMzc2MjA1IDAuMjg2OCwtMC4zNzYyMDUgMS42MTAwMiwtMC41MDAwMDYgMy4yODQ5OSwtMS41MjkwMzEgNC4zLC0zLjQ1NDA1NyAwLjk5NzAxLC0xLjg5NTAyNSAxLjE1NzkxLC00LjQyNDEyNiAtMC42NjYxMSwtNS44MzAxNDQgLTEuNjAxMDIsLTEuMjM1MDE2IC00LjAyLC0xLjA0MDEyNyAtNS45NTAwMywwLjY3NDg5NSAtMS44ODgwMiwxLjY2NTAyMSAtMi41MTI3NSw0LjA4NzQ1NSAtMi4yNTc3NSw2LjIxMDQ4MyAwLjA0NiwwLjM2ODAwNSAwLjAyNjksMC40OTE4MTggLTAuNDgwMDcsMC41MzM4MTggLTIuOTAyMDQsMC4yMzAwMDMgLTUuNjk4MjIsMC4zMDk4MzggLTguODA4MjYsMC40NzI4NCAtMC4yMDgsMC4wMTUgLTAuMjczOTYsLTAuMTIxMDY1IC0wLjE1Mjk2LC0wLjI2NDA2NyAzLjU4MTA0LC02LjE2MDA4MSA4LjkyNzkyLC0xMC41NDY3NTggMTQuODQyMDEsLTE0Ljg2NjgxNSAwLjM5MiwtMC4yOTEwMDMgMC4yNzIzMSwtMC44NDQzNzYgMC4yNTYzMSwtMS4zMDYzODIgMTAuNjc4MTQsMi4yOTcwMyAyMC45OTc0Nyw2LjU3MjI2OCAzMi4wNzU2MSw2LjQ4MTI2OCA0LjU4MTA3LC0wLjAzNyA4Ljk2Njg1LC0wLjcyNjkyNiAxMy4xNTg5MSwtMy4wMDM5NTUgMy42ODcwNCwtMS45OTEwMjYgNS4xODMyMiwtMy44MzI5MiA1LjI5MzIyLC01Ljc0Njk0NSAwLjA4NiwtMS4zMjMwMTggLTAuODQzMjYsLTIuMTU5MzExIC0yLjE2NjI4LC0xLjg3NDMwNyAtMTEuMTkzMTQsMi41NDYwMzQgLTIxLjg3MTIsMi41MTc5MjcgLTMzLjAwNzMzLDEuMTgzOTA5IC0xMi43MTkxNywtMS41Mjg2NDUgLTI0LjkyNDExLC00LjY3NTU2MyAtMzcuNTg0MzMxLC00LjYzNTkgeiBtIDIyLjM0Mjg1OSwxNy44NTI2ODQgYyAwLjI2MTYsMC4wMTM4NiAwLjUwNjM1LDAuMTAwNzE2IDAuNzA0MzUsMC4yNjg3MTggMC41OTAwMSwwLjQ5OTAwNiAwLjMxMDc1LDEuNzQ0MDM1IC0wLjI4NTI2LDIuNjA2MDQ2IC0wLjY1MTAxLDAuOTUxMDEyIC0xLjc1NTEsMS43NzE5NzMgLTIuNzYyMTEsMS45NzE5NzYgLTAuMjAyLDAuMDM3IC0wLjM3NjkyLC0wLjA0ODk1IC0wLjQ1OTkyLC0wLjQ5MTk2MSBoIC0wLjAwMSBjIC0wLjE2NCwtMS4xNzMwMTYgMC4yMjIyNywtMi43NDM5MTggMS40ODgyOCwtMy44NTA5MzMgMC4zOTYyNiwtMC4zNDY4NzkgMC44Nzk2OCwtMC41MjY5NDIgMS4zMTU2OSwtMC41MDM4NDYgeiBtIDg5Ljg1NDU5LDAuMjI0NzkzIGMgLTIuMDM1MDIsMCAtNC43MDM4OSwwLjAwMzYgLTYuODI0OTEsMC4wMDM2IC0wLjUwNSwwIC0wLjc2NjExLDAuMDYxMDYgLTEuMDA1MTEsMC41MjYwNjcgLTAuNzgyMDEsMS40ODUwMTkgLTEwLjMyMDQyLDE1LjYzODQ5OSAtMTIuMDk2NDQsMTguMzg3NTM1IC0wLjI5ODAxLDAuNDE4MDA2IC0wLjY2MzksMC4zNTk3IC0wLjcwNTksLTAuMTE3MzA1IC0wLjE4LC0xLjYzMjAyMiAtMS42MDMyNCwtMy41MDc5MjcgLTMuODQ2MjgsLTQuNDA1OTQgLTEuNzEwMDIsLTAuNjg3MDA4IC0zLjM4MjA1LC0wLjgxMDkxMyAtNS4xMTkwOCwtMC41ODI5MTEgLTMuMTM3MDMsMC40MTcwMDYgLTUuOTMxNjQsMi4wNTcxMzYgLTguMzg5NjgsMy45MDQxNjEgLTMuNzAzMDQsMi43ODkwMzcgLTYuODk3NTQsNi4zOTk3MDkgLTExLjAyMjYsOS4wNjk3NDQgLTIuMjUyMDMsMS40NTMwMTkgLTUuMzM0OTgsMi43MjA0NjYgLTcuMzk4MDEsMC44MzA0NDEgLTEuODY3MDEsLTEuNzE0MDIyIC0xLjY1NzExLC01LjUyMjEyMyAxLjE5OTkzLC04LjQ2NjE2MiAwLjMwMTAxLC0wLjMwOTAwNCAwLjY2MjEzLC0wLjA1MTE4IDAuNjA1MTMsMC4yMjU4MjYgLTAuMjcsMS4zMzIwMTcgMC4wNjIxLDIuNjU2MzA0IDEuMDgzMTQsMy41ODUzMTYgMS4yNDYwMSwxLjEwNTAxNSAzLjAyOTc5LDEuMjMxMDA0IDQuNTU1OCwwLjQ5Mjk5NCAxLjgwMjAyLC0wLjg4MzAxMSAyLjg2MDM2LC0yLjU5MDM4NiAzLjE3MDM2LC00LjUyODQxMiAwLjQ3NzAxLC0zLjAwNTAzOSAtMS44NjAxMSwtNS42NTU4NjUgLTQuNzgyMTUsLTUuODY3ODY4IC0yLjM3NTAzLC0wLjE2NTAwMyAtNC42NTE4NCwwLjY1MzAxMyAtNi44Njk4NywyLjQ2NzAzNyAtMS4xMTMwMiwwLjkxMzAxMiAtMS43NDYzMSwxLjU4ODk1OSAtMi43MDczMywyLjk0Mjk3NyAtMC4yMzUsMC4zMzQwMDUgLTAuNTk0OTEsMC4zNjc5NDkgLTAuNTgyOTEsLTAuMTI1MDU3IDAuMTExMDEsLTMuODQ3MDUgLTEuNDk3MjgsLTYuMDExODQxIC00LjcxMDMyLC02LjA4Mjg0MiAtMi40OTIwNCwtMC4wNTggLTUuMTU2NjIsMS4yNzk3IC03LjIzMjY0LDIuOTE5NzIzIC0yLjI3NjA0LDEuODEwMDIzIC00LjI2NjA4LDQuMjA4MTE3IC02LjM5OTEsNi40NjIxNDcgLTAuMjY1LDAuMjc4MDA0IC0wLjQ5NzAzLDAuMjY1MTIxIC0wLjU3MTAzLC0wLjI3Mzg4NSAtMC4wNjUsLTIuNTQ5MDM0IC0wLjcxMjI2LC01LjAxODE1IC0xLjkwNDI4LC02Ljc3MTE3MyAtMC40MjEwMSwtMC42MTAwMDggLTEuMzA4MTMsLTAuOTEyMjM1IC0yLjA1NDE0LC0wLjUwMDIyOSAtMC4zNDQsMC4xODcwMDMgLTEuNTQyOCwwLjczMjI5NyAtMi40MTM4MSwxLjQyNzMwNSAtMC40MzMwMSwwLjM1MzAwNSAtMC42MDAzMSwwLjg2Mzc2NCAtMC40MTAzMSwxLjUxODc3MyAxLjE1MDAyLDMuODA3MDQ5IDAuODk3MDEsOC4xMzcxMTYgLTAuNjYzMDEsMTEuNzk1MTYzIC0xLjQzMzAyLDMuMzQ4MDQ0IC00LjIxNzk2LDYuMzcwMzEyIC03LjQ4OTk5LDcuMzkyMzI1IC0yLjE1NjAzLDAuNjc3MDA5IC00LjM5ODE3LDAuMzQ1ODI5IC01Ljc4NTE5LC0xLjU0NzE5NSAtMS45MDUwMiwtMi42MTIwMzUgLTEuMTM0NzgsLTcuMTUzOTQ4IDEuNzAzMjYsLTEwLjkyNjk5OCAyLjUwNzAzLC0zLjMyMDA0MyA2LjEzMDE3LC01LjQzMDI0MiA5Ljc0NzIyLC02Ljc4OTI2IDAuNDI2LC0wLjE2MjAwMyAwLjUxMjc0LC0wLjQzMTYxMiAwLjM5Mjc0LC0wLjc4OTYxNyAtMC4xOTcsLTAuNTkwMDA4IC0wLjUwOTcyLC0xLjM5MDUxMyAtMC42Mzg3MiwtMS43NTc1MTggLTAuMzMxLC0wLjg3MzAxMiAtMS4yNjAxMywtMS4wMTU5NzIgLTIuMzkzMTQsLTAuODkyOTcgLTIuNjI3MDQsMC4zMDMwMDQgLTQuOTk2LDEuMTkzOTggLTcuMzM3MDMsMi40MzQ5OTcgLTYuMTMwMDgsMy4yNTAwNDIgLTkuMjAyMjYsOS41NDAxNjQgLTEwLjU1MDI3LDEyLjkwNjIwOCAtMC42NDgwMSwxLjYxNTAyMSAtMS4yMDI3OCwyLjYyNTE1OSAtMS45MTk3OSwzLjUxOTE3MSAtMC45NjYwMSwxLjIwMzAxNSAtMi4xNzkxMjIsMi4yOTcwNzkgLTQuMzk3MTUxLDQuMjI2MTA0IC0wLjIwMDAwMywwLjE3NzAwMiAtMC4zNDk5MDMsMC41NDU3OTggLTAuMTgxOTAyLDAuODg3ODAzIDAuMjI3MDAzLDAuNDY1MDA2IDEuMzc5ODM3LDIuMDc3MDU0IDEuNzA1ODQyLDIuMjIxMDU2IDAuMzYxMDA1LDAuMTc2MDAyIDAuNzc5NzQ1LC0wLjA2OTY1IDAuOTQ3NzQ3LC0wLjE4OTY1MyAxLjU1MjAxNCwtMS4wNDEwMTQgMy40MDkwODQsLTIuNjkyMTYxIDQuMzE4MDk0LC0zLjgxMjE3NiAwLjMxOCwtMC4zODMwMDQgMC42NDY0NSwtMC4yMjE4MjIgMC44MTU0NSwwLjM2MDE4NiAwLjg0ODAyLDIuOTk2MDM5IDMuMDY4NjUsNS40NDE3MTggNi4xMzk2OSw2LjQ2NDczMSA1LjYyMDA3LDEuODc3MDI1IDExLjQ1MDE2LC0wLjgzOTU5OCAxNS44NTAyMiwtNS41Njg2NjEgMi43OTYwMywtMy4wMDUwNCAzLjgwNTIyLC00LjkzODMyNCA0Ljg3NzIyLC02LjI1MjM0MSAxLjgxNjAzLC0yLjIyOTAyOSA1LjQwMDA3LC03LjIxNDg3NSA5LjY2NzEzLC0xMC40MTU5MTcgMS41NjUwMiwtMS4xODAwMTUgMy40MTgxMiwtMi4wODAxMjQgNC4zNTAxMywtMS40ODMxMTUgMC43NDcwMSwwLjQ4MDAwNiAwLjk4ODE0LDEuNTk0Nzg2IC0wLjIxMTg4LDMuNzU0ODE1IC00LjM1MDA1LDcuODY3MTAzIC0xMC43NTQ0NywxNy4xMTAzMzkgLTExLjkyODQ4LDE5LjM1MzM2OSAtMC4yMTQsMC4zODkwMDUgLTAuMDI3MSwwLjY5NDAxNiAwLjM4Mzk1LDAuNjk0MDE2IDIuMjc3MDMsLTAuMDEgNC41MzUxNiwtMC4wMDUyIDYuNjAyMTksLTAuMDA1MiAwLjM0MywtMC4wMTYgMC40OTgyNSwtMC4xNzA4NTkgMC42NzAyNSwtMC40MTE4NjIgMy4zMzkwNCwtNS4xNzUwNjggNi40ODIwMSwtMTAuMTAyOTI3IDkuODUwMDYsLTE1LjE5NTk5NCAwLjE5LC0wLjMwMDAwNCAwLjM2MywtMC4wNjc0NCAwLjM3LDAuMDYzNTYgMC4wNywxLjE4MTAxNiAwLjM2MjczLDIuNzk4MjIxIDEuMDcwNzQsMy44NjAyMzUgMS4yNzQwMiwxLjk2MjAyNSAzLjA3ODI5LDIuODA0OTIgNS4wODAzMSwyLjgxNzkyIDEuNTkyMDIsMC4wMTggMi4zOTY5NCwtMC4yMjE3ODggNC4xMTM5NywtMC44NTY3OTYgYSAxNC40NzUyMDQsMTQuNDc1MjA0IDAgMCAwIDMuMzgwMTYsLTEuNzk2Mjc2IGMgMC41MDMwMSwtMC4zNDUwMDQgMC41OTA3NSwwLjIzMzQ2IDAuNTc3NzUsMC4zMjI0NjIgLTAuNzcyMDEsNC4xMDkwNTQgMC4xODIxNSw4Ljk3NjcgNC4zMDYyLDEwLjk5NTcyNyA0LjkzNjA2LDIuNDEwMDMyIDEwLjM1ODIzLC0wLjk3NjgyOCAxMy40NzgyNywtNC4wMzM4NjggMC4zMDUwMSwtMC4yOTUwMDQgMC42MzQwNywtMC4yNjQwMDUgMC42NjUwNywwLjM3MDAwNCAwLjA2NiwxLjE2ODAxNSAwLjU5ODA1LDIuNTUzMjkxIDEuNTc0MDcsMy41MjMzMDQgMi42MTQwMywyLjU5ODAzNCA3Ljg5MDIsMS41Njg3NjIgMTMuMTg1MjYsLTIuNDkwMjkxIDMuNDAwMDUsLTIuNTk3MDM0IDYuOTU2OSwtNi4yNjc4OTkgMTAuMTY5OTQsLTEwLjE1NDk1MSAwLjExOTAxLC0wLjE1MDAwMSAwLjIwNzc5LC0wLjM5MzE2NyAtMC4wMjIyLC0wLjYzNzE3MSAtMC40OSwtMC41MDcwMDYgLTEuMTk3NTgsLTEuMDg3MjcgLTEuNjgyNTksLTEuNTM0Mjc1IC0wLjIyMSwtMC4xODYwMDMgLTAuNTQ2MjksLTAuMTMyNzM0IC0wLjczMzI5LDAuMDA4MyAtMy4yOTMwNSwzLjEwMTA0MSAtNi4yNTY5OSw2LjYzODIxNSAtMTAuNTQzMDQsOS41NjMyNTUgLTEuNDQ1MDIsMC45OTgwMTMgLTMuNzQ3MTMsMS44MDQwOCAtNC43ODIxNSwwLjQxODA2MiAtMC40MDMsLTAuNTM4MDA3IC0wLjM1NjY5LC0xLjI4MzMxOCAwLjA0MDMsLTIuMjYwMzMgMS4yNTEwMiwtMy4wODYwNDEgMjEuMDMwMDMsLTMyLjkwNDQ0NSAyMi4wNTYwNSwtMzQuNjYwNDY4IGwgMC4wMDIsLTAuMDAyMSBjIDAuMTc2LC0wLjMwNjAwNCAtMC4wMSwtMC41Mjk2ODQgLTAuMzk5OTgsLTAuNTI5Njg0IHogbSAtMjcuNzE0NjMsMTguNjQxNzgzIGMgMC41MTc4OSwtMC4wMDQ1IDEuMDAyOCwwLjA5NDE5IDEuNDQ0MzYsMC4zMDQzNzUgMi40MzYwMywxLjE1MTAxNSAxLjY1Nzk3LDMuOTQ0MDczIDAuNTY4OTYsNi4xMzcxMDIgYSAwLjU4NzAwODI4LDAuNTg3MDA4MjggMCAwIDAgLTAuMDQzOSwwLjQ1MjE3IGMgMC4wNCwwLjIyODAwMyAwLjMzOTU3LDAuNDQ4OTcxIDAuNjM0NTgsMC41NTM5NzIgMC4xMDMsMC4wMzggMC4xNjE0NSwwLjExMTkxNCAwLjA0NDUsMC4zNTE5MTcgLTAuODQyMDIsMS43ODUwMjMgLTEuNjE0MDksMi44MTQwNjEgLTIuNjY5MSw0LjM2NDA4MSAtMC45NjgsMS40MzMwMTkgLTIuMDYwMjcsMi41NTAxMjcgLTMuMzg0MjksMy42MjYxNDEgLTEuOTk1MDMsMS42MzUwMjEgLTQuNzY0ODUsMy40MTM5NzEgLTcuMDU0ODgsMi4yMTc5NTYgLTEuMDE4MDEsLTAuNTI0MDA3IC0xLjQ1NzEyLC0xLjkzMzIyMSAtMS40MzcxMiwtMy4wNzQyMzYgMC4wNTMsLTMuMjEwMDQyIDEuNDkwMTcsLTYuNTA0MDE0IDQuMTUyMjEsLTkuNzQyMDU1IDIuNjM3NDEsLTMuMjE0MjkzIDUuNTAwNiwtNS4xNzE3MSA3Ljc0NDc1LC01LjE5MTQyMyB6IiAvPgogIDwvZz4KPC9zdmc+Cg==" class="partner-logo-img" alt="Ford">
+        </div>
+        <div class="upload-overlay"><span>Replace logo</span></div>
+      </div>
+    </div>
+
+    <!-- Headline -->
+    <div class="header-content">
+      <h1 contenteditable="true">Ford's Mobile Teams Already Run on Amplitude.<br>Web Is Next.</h1>
+      <p class="header-sub" contenteditable="true">Product teams across FordPass, Ford Pro, and Model e turn raw digital signals into decisions in minutes — while web still waits on VML to pull data from Adobe. Here's what closing that gap looks like.</p>
+    </div>
+
+  </div><!-- /header -->
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- Challenge row -->
+    <div class="challenge-row">
+
+      <div class="challenge-left">
+        <p class="challenge-intro" contenteditable="true">Today, understanding Ford's web experience means filing a request and waiting on VML to pull data out of Adobe — often days or weeks after the decision has already been made.</p>
+        <p class="challenge-sub" contenteditable="true">Ford web teams still struggle to:</p>
+        <ul class="challenge-list" id="challenge-list">
+          <li><span contenteditable="true">Answer their own questions without queuing a request and waiting on VML for Adobe reports</span></li>
+          <li><span contenteditable="true">Connect web activity to what customers actually do downstream across FordPass and Ford.com</span></li>
+          <li><span contenteditable="true">See one customer journey — web lives in Adobe while mobile and product teams already run on Amplitude</span></li>
+          <li><span contenteditable="true">Test and act in-flight, instead of learning what worked only after the campaign ends</span></li>
+        </ul>
+      </div>
+
+      <div class="challenge-right">
+        <div class="screenshot-wrap" id="screenshot-wrap">
+          <div class="screenshot-placeholder" id="screenshot-placeholder">
+            <div class="quote-card">
+              <span class="qmark">&ldquo;</span>
+              <div class="qtext" contenteditable="true">What used to take us one month, I was able to do in Amplitude in 5 minutes.</div>
+              <div class="qname" contenteditable="true">David Harris</div>
+              <div class="qtitle" contenteditable="true">FordPass, North America</div>
+            </div>
+          </div>
+          <img class="screenshot-img" id="screenshot-img" src="" alt="" style="display:none;">
+          <div class="img-overlay" id="screenshot-overlay">
+            <button class="img-overlay-btn" onclick="document.getElementById('upload-screenshot').click()">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 4l3-3 3 3" stroke="#333" stroke-width="1.5" stroke-linecap="round"/><path d="M1 10v2a1 1 0 001 1h10a1 1 0 001-1v-2" stroke="#333" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Replace with image
+            </button>
+            <button class="img-overlay-btn danger" id="remove-screenshot-btn" style="display:none" onclick="removeScreenshot()">✕ Remove</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /challenge-row -->
+
+    <!-- Body copy -->
+    <p class="body-copy" contenteditable="true">Amplitude already gives Ford's mobile and product teams a single platform to capture and analyze the full customer journey — so teams ask questions directly, without waiting on an analytics handoff. Roughly 19 Ford teams are live today, driving $500K in cost avoidance through OTA experiment flags and 35% faster time-to-insight. Bringing web onto the same platform closes the last gap between how Ford sees its app and how it sees its site.</p>
+
+    <!-- Features -->
+    <div class="features-title" contenteditable="true">One platform for every Ford product team</div>
+    <div class="features-grid">
+
+      <div class="feature">
+        <div class="feature-icon-wrap">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6h20l-7 9v7l-6-3v-4L4 6z" stroke="#0052F2" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="feature-text">
+          <div class="feature-title" contenteditable="true">Funnel &amp; Journey Analysis</div>
+          <div class="feature-desc" contenteditable="true">See conversion at every step and the real routes customers take across Ford.com, FordPass, and Ford Pro — not isolated, team-by-team dashboards.</div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon-wrap">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="5" width="18" height="13" rx="3" stroke="#0052F2" stroke-width="1.6"/>
+            <path d="M7 19l-3 4v-4" stroke="#0052F2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M23 10l2 2-2 2" stroke="#0052F2" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M8 11h8M8 14h5" stroke="#0052F2" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="feature-text">
+          <div class="feature-title" contenteditable="true">Conversational AI for Every Team</div>
+          <div class="feature-desc" contenteditable="true">Any Ford marketer or PM asks a question in plain language — no BI queue, no waiting on VML. Agents build charts, monitor dashboards, and surface anomalies automatically.</div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon-wrap">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 4v10l-5 8h18l-5-8V4" stroke="#0052F2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 4h12" stroke="#0052F2" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="17" cy="18" r="2" fill="#0052F2" opacity="0.3"/>
+          </svg>
+        </div>
+        <div class="feature-text">
+          <div class="feature-title" contenteditable="true">Session Replay &amp; Web Experiments</div>
+          <div class="feature-desc" contenteditable="true">Watch exactly where web customers hit friction — rage clicks, dead clicks — then run no-code experiments and act without waiting on engineering.</div>
+        </div>
+      </div>
+
+    </div><!-- /features-grid -->
+
+  </div><!-- /body -->
+
+  <!-- QUOTE STRIP -->
+  <div class="quote-strip">
+    <div class="quote-strip-label" contenteditable="true">In Ford's own words</div>
+    <div class="quote-strip-row">
+      <div class="qs-item">
+        <div class="qs-text" contenteditable="true">"Amplitude's value proposition to Ford is enormous."</div>
+        <div class="qs-attr" contenteditable="true"><b>Josh Gilbert</b> · Product Owner, VDCC</div>
+      </div>
+      <div class="qs-item">
+        <div class="qs-text" contenteditable="true">"We are living through a digital-product revenue revolution — redesigning the value we create for customers."</div>
+        <div class="qs-attr" contenteditable="true"><b>Jian Wei Hoh</b> · Head of Business Design</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGO STRIP -->
+  <div class="logo-strip">
+    <div class="logo-strip-label" contenteditable="true">Product teams across Ford already run on Amplitude</div>
+    <div class="logos-row" id="logos-row">
+      <div class="logo-slot" onclick="triggerLogoUpload(0)" title="Click to upload logo">
+        <span class="logo-slot-text" contenteditable="true" onclick="event.stopPropagation()">FordPass</span>
+        <div class="logo-slot-overlay"><span>Upload</span></div>
+      </div>
+      <div class="logo-slot" onclick="triggerLogoUpload(1)" title="Click to upload logo">
+        <span class="logo-slot-text" contenteditable="true" onclick="event.stopPropagation()">Ford Pro</span>
+        <div class="logo-slot-overlay"><span>Upload</span></div>
+      </div>
+      <div class="logo-slot" onclick="triggerLogoUpload(2)" title="Click to upload logo">
+        <span class="logo-slot-text" contenteditable="true" onclick="event.stopPropagation()">Ford Model e</span>
+        <div class="logo-slot-overlay"><span>Upload</span></div>
+      </div>
+      <div class="logo-slot" onclick="triggerLogoUpload(3)" title="Click to upload logo">
+        <span class="logo-slot-text" contenteditable="true" onclick="event.stopPropagation()">Lincoln</span>
+        <div class="logo-slot-overlay"><span>Upload</span></div>
+      </div>
+      <div class="logo-slot" onclick="triggerLogoUpload(4)" title="Click to upload logo">
+        <span class="logo-slot-text" contenteditable="true" onclick="event.stopPropagation()">FCSFleet</span>
+        <div class="logo-slot-overlay"><span>Upload</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-copy">© 2026 Amplitude Inc. Confidential. All Rights Reserved.</div>
+    <div class="ae-block">
+      <div class="ae-name" contenteditable="true">Sean Bell McDermott</div>
+      <div class="ae-title" contenteditable="true">Enterprise Account Executive – Ford</div>
+      <div class="ae-contact" contenteditable="true">seanbell.mcdermott@amplitude.com</div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// ── Image uploads ──
+function readFile(file, cb) {
+  const r = new FileReader();
+  r.onload = e => cb(e.target.result);
+  r.readAsDataURL(file);
+}
+
+// Amplitude logo
+document.getElementById('upload-amp-logo').addEventListener('change', function() {
+  if (!this.files[0]) return;
+  readFile(this.files[0], url => {
+    document.getElementById('amp-logo-display').innerHTML = `<img src="${url}" class="amp-logo-img" alt="Amplitude" style="filter:none;">`;
+  });
+  this.value = '';
+});
+
+// Ford / partner logo
+document.getElementById('upload-partner-logo').addEventListener('change', function() {
+  if (!this.files[0]) return;
+  readFile(this.files[0], url => {
+    document.getElementById('partner-logo-display').innerHTML = `<img src="${url}" class="partner-logo-img" alt="Partner" style="filter:none;">`;
+  });
+  this.value = '';
+});
+
+// Screenshot / quote card
+document.getElementById('upload-screenshot').addEventListener('change', function() {
+  if (!this.files[0]) return;
+  readFile(this.files[0], url => {
+    const img = document.getElementById('screenshot-img');
+    img.src = url;
+    img.style.display = 'block';
+    document.getElementById('screenshot-placeholder').style.display = 'none';
+    document.getElementById('remove-screenshot-btn').style.display = 'flex';
+  });
+  this.value = '';
+});
+
+function removeScreenshot() {
+  const img = document.getElementById('screenshot-img');
+  img.style.display = 'none';
+  img.src = '';
+  document.getElementById('screenshot-placeholder').style.display = 'block';
+  document.getElementById('remove-screenshot-btn').style.display = 'none';
+}
+
+// Customer / brand logos
+function triggerLogoUpload(idx) {
+  document.getElementById('upload-logo-' + idx).click();
+}
+for (let i = 0; i < 5; i++) {
+  (function(idx) {
+    document.getElementById('upload-logo-' + idx).addEventListener('change', function() {
+      if (!this.files[0]) return;
+      readFile(this.files[0], url => {
+        const slot = document.querySelectorAll('.logo-slot')[idx];
+        const textEl = slot.querySelector('.logo-slot-text');
+        if (textEl) textEl.style.display = 'none';
+        let imgEl = slot.querySelector('.logo-slot-img');
+        if (!imgEl) {
+          imgEl = document.createElement('img');
+          imgEl.className = 'logo-slot-img';
+          slot.insertBefore(imgEl, slot.querySelector('.logo-slot-overlay'));
+        }
+        imgEl.src = url;
+        imgEl.style.display = 'block';
+      });
+      this.value = '';
+    });
+  })(i);
+}
+</script>
+</body>
+</html>
